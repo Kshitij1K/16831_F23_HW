@@ -1,8 +1,11 @@
-numpy==1.25.2
-# numpy==1.21.2
-mujoco==2.2.1
-mujoco-py
-free-mujoco-py
+# numpy==1.25.2
+numpy==1.21.2 # Use this
+
+#install these independantly
+# mujoco==2.2.1
+# mujoco-py
+# free-mujoco-py
+
 gym==0.25.1
 tensorboard==2.10.0
 tensorboardX==2.5.1
@@ -11,3 +14,7 @@ torch==1.12.1
 pyvirtualdisplay
 IPython
 gym-notebook-wrapper
+
+# Also run these commands
+# sudo apt-get install libosmesa6-dev
+# sudo apt-get install patchelf

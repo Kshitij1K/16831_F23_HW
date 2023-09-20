@@ -81,7 +81,12 @@ class MLPPolicy(BasePolicy, nn.Module, metaclass=abc.ABCMeta):
             observation = obs[None]
 
         # TODO return the action that the policy prescribes
-        raise NotImplementedError
+        self.mean_net.eval()
+        result = self.mean_net(observation)
+        self.mean_net.train()
+
+        return result
+        # raise NotImplementedError
 
     # update/train this policy
     def update(self, observations, actions, **kwargs):

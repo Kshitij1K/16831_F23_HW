@@ -1,1 +1,3 @@
 *.pyc
+events.out.tfevents.*
+hw1/rob831.egg-info/*

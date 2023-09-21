@@ -82,9 +82,9 @@ class MLPPolicy(BasePolicy, nn.Module, metaclass=abc.ABCMeta):
 
         # TODO return the action that the policy prescribes
         self.mean_net.eval()
-        result = self.mean_net(observation)
-        self.mean_net.train()
-
+        obs_tensor = ptu.from_numpy(obs)
+        res_tensor = self.mean_net(obs_tensor)
+        result = ptu.to_numpy(res_tensor)
         return result
         # raise NotImplementedError
 
@@ -115,10 +115,14 @@ class MLPPolicySL(MLPPolicy):
             adv_n=None, acs_labels_na=None, qvals=None
     ):
         # TODO: update the policy and return the loss
+        self.mean_net.train()
         obs_tensor = ptu.from_numpy(observations)
         act_tensor = ptu.from_numpy(actions)
         loss = self.loss(self.forward(obs_tensor), act_tensor)
         loss.backward()
+        self.optimizer.step()
+        self.optimizer.zero_grad()
+
         return {
             # You can add extra logging information here, but keep this line
             'Training Loss': ptu.to_numpy(loss),

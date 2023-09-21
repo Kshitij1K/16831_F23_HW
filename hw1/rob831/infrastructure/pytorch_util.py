@@ -47,6 +47,8 @@ def build_mlp(
 
     # TODO: return a MLP. This should be an instance of nn.Module  [OK]
     # Note: nn.Sequential is an instance of nn.Module.
+    init_gpu(use_gpu=True, gpu_id=0)
+    
     layers = []
     layers.append(nn.Linear(input_size, size))
     layers.append(activation)

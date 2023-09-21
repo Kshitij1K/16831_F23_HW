@@ -17,7 +17,7 @@ MAX_NVIDEO = 2
 
 def make_env(env_name):
     if env_name == 'Ant-v2':
-        return gym.make(env_name, use_contact_forces=True)
+        return gym.make(env_name)
     else:
         return gym.make(env_name)
 
@@ -171,6 +171,8 @@ class RL_Trainer(object):
 
         # (2) collect `self.params['batch_size']` transitions
 
+        data = np.load(load_initial_expertdata, allow_pickle=True)
+        return data, 0, None
         # TODO collect `batch_size` samples to be used for training
         # HINT1: use sample_trajectories from utils
         # HINT2: you want each of these collected rollouts to be of length self.params['ep_len']
@@ -196,12 +198,12 @@ class RL_Trainer(object):
             # TODO sample some data from the data buffer
             # HINT1: use the agent's sample function
             # HINT2: how much data = self.params['train_batch_size']
-            ob_batch, ac_batch, re_batch, next_ob_batch, terminal_batch = TODO
+            ob_batch, ac_batch, re_batch, next_ob_batch, terminal_batch = self.agent.sample(self.params['train_batch_size'])
 
             # TODO use the sampled data to train an agent
             # HINT: use the agent's train function
             # HINT: keep the agent's training log for debugging
-            train_log = TODO
+            train_log = self.agent.train(ob_batch, ac_batch, re_batch, next_ob_batch, terminal_batch)
             all_logs.append(train_log)
         return all_logs
 

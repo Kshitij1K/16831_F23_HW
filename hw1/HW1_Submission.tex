@@ -69,9 +69,16 @@ backgroundcolor = \color{light-yellow}
   \end{tabular}
 \end{center}
 I am choosing the Ant environment, which has a performance of 31.88\% of the expert, and the Hopper environment, which has a performance of 21.35\% of the expert
-Parameters used:
-Network size - 2 hidden layers of size 64 each
-Amount of data - Training data batch size: 5000 and Evaluation data batch size: 5000
+
+The parameters used for all the environments are the following:
+
+Number of iterations: 1
+
+Evaluation Batch size: 5000
+
+Batch Size: 5000
+
+Network size: 2 hidden layers of size 64 each
 
 \subsection{Part 4}
 
@@ -83,8 +90,21 @@ Amount of data - Training data batch size: 5000 and Evaluation data batch size: 
   \label{fig:1.3}
 \end{figure}
 
+The parameters used for the Hopper are the following:
+
+Number of iterations: 1
+
+Evaluation Batch size: 5000
+
+Batch Size: 5000
+
+Network size: 2 hidden layers of variable size (varying from 10 to 150)
+
+\newpage
+
 \section{DAgger}
 \subsection{Part 2}
+
 \begin{figure}[H]
   \centering
   \includegraphics[width=1\linewidth]{irl_ass1_2.1_ant.png}
@@ -100,9 +120,13 @@ Amount of data - Training data batch size: 5000 and Evaluation data batch size: 
 \end{figure}
 
 The parameters used for both the Hopper and the Ant are the following:
+
 Number of iterations: 10
+
 Evaluation Batch size: 5000
+
 Batch Size: 5000
+
 Network size: 2 hidden layers of size 64 each
 
 \end{document}

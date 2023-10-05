@@ -149,8 +149,23 @@ class MLPPolicyPG(MLPPolicy):
         # HINT4: use self.optimizer to optimize the loss. Remember to
             # 'zero_grad' first
 
-        raise NotImplementedError
+        # raise NotImplementedError
+        # Do log probability of actions
+        action_distribution = self.forward(observations)
+        log_prob = action_distribution.log_prob(actions)
 
+        # Multiply by advantages
+        log_prob = log_prob * advantages
+
+        # Take mean over all actions
+        loss = -log_prob.mean()
+
+        # Backpropagate
+        self.optimizer.zero_grad()
+        loss.backward()
+        self.optimizer.step()
+
+        # Compute baseline loss
         if self.nn_baseline:
             ## TODO: update the neural network baseline using the q_values as
             ## targets. The q_values should first be normalized to have a mean
@@ -160,10 +175,26 @@ class MLPPolicyPG(MLPPolicy):
                 ## updating the baseline. Remember to 'zero_grad' first
             ## HINT2: You will need to convert the targets into a tensor using
                 ## ptu.from_numpy before using it in the loss
-            raise NotImplementedError
+            
+            # Normalize q_values
+            q_values = normalize(q_values, np.mean(q_values), np.std(q_values))
+
+            # Convert to tensor
+            q_values = ptu.from_numpy(q_values)
+
+            # Compute baseline loss
+            baseline_predictions = self.baseline(observations)
+            baseline_loss = self.baseline_loss(baseline_predictions, q_values)
+
+            # Backpropagate
+            self.baseline_optimizer.zero_grad()
+            baseline_loss.backward()
+            self.baseline_optimizer.step()
+
+            # raise NotImplementedError
 
         train_log = {
-            'Training Loss': ptu.to_numpy(policy_loss),
+            'Training Loss': ptu.to_numpy(loss),
         }
         return train_log
 

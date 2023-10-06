@@ -183,7 +183,7 @@ class MLPPolicyPG(MLPPolicy):
             q_values = ptu.from_numpy(q_values)
 
             # Compute baseline loss
-            baseline_predictions = self.baseline(observations)
+            baseline_predictions = self.baseline(observations).squeeze()
             baseline_loss = self.baseline_loss(baseline_predictions, q_values)
 
             # Backpropagate

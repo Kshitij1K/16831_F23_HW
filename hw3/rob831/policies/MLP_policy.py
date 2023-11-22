@@ -128,4 +128,35 @@ class MLPPolicy(BasePolicy, nn.Module, metaclass=abc.ABCMeta):
 class MLPPolicyAC(MLPPolicy):
     def update(self, observations, actions, adv_n=None):
         # TODO: update the policy and return the loss
+        observations = ptu.from_numpy(observations)
+        actions = ptu.from_numpy(actions)
+        # advan
+        advantages = ptu.from_numpy(adv_n)
+
+        # TODO: update the policy using policy gradient
+        # HINT1: Recall that the expression that we want to MAXIMIZE
+            # is the expectation over collected trajectories of:
+            # sum_{t=0}^{T-1} [grad [log pi(a_t|s_t) * (Q_t - b_t)]]
+        # HINT2: you will want to use the `log_prob` method on the distribution returned
+            # by the `forward` method
+        # HINT3: don't forget that `optimizer.step()` MINIMIZES a loss
+        # HINT4: use self.optimizer to optimize the loss. Remember to
+            # 'zero_grad' first
+
+        # raise NotImplementedError
+        # Do log probability of actions
+        action_distribution = self.forward(observations)
+        log_prob = action_distribution.log_prob(actions)
+
+        # Multiply by advantages
+        log_prob = log_prob * advantages
+
+        # Take mean over all actions
+        loss = -log_prob.mean()
+
+        # Backpropagate
+        self.optimizer.zero_grad()
+        loss.backward()
+        self.optimizer.step()
+
         return loss.item()

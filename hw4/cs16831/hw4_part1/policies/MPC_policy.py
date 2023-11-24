@@ -107,7 +107,7 @@ class MPCPolicy(BasePolicy):
 
             # pick the action sequence and return the 1st element of that sequence
             best_action_sequence = np.argmax(predicted_rewards)
-            action_to_take = candidate_action_sequences[best_action_sequence]
+            action_to_take = candidate_action_sequences[best_action_sequence][0]
             return action_to_take[None]  # Unsqueeze the first index
 
     def calculate_sum_of_rewards(self, obs, candidate_action_sequences, model):

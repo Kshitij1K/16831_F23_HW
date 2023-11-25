@@ -7,3 +7,5 @@ hw1/rob831.egg-info/*
 *.synctex.gz
 *.fls
 *.fdb_latexmk
+data/
+hw4data/

@@ -69,10 +69,25 @@ class MPCPolicy(BasePolicy):
                 #     (Hint: what existing function can we use to compute rewards for
                 #      our candidate sequences in order to rank them?)
                 # - Update the elite mean and variance
-                pass
+                if (i == 0):
+                    actions = np.random.rand(num_sequences, horizon, self.ac_dim)
+                    actions_mean = np.mean(actions,axis=0)
+                    actions_std = np.std(actions,axis=0)
+                else:
+                    actions = np.random.normal(loc=actions_mean, scale=actions_std, size=(num_sequences, horizon, self.ac_dim))
+
+                actions = (self.high - self.low) * actions + self.low
+                predicted_rewards = self.evaluate_candidate_sequences(actions, obs)
+                idx = np.argpartition(predicted_rewards, -self.cem_num_elites)[-self.cem_num_elites:]
+                elites = actions[idx]
+                elites = (elites - self.low) / (self.high - self.low)
+
+                elites_mean = self.cem_alpha * np.mean(elites, axis=0) + (1 - self.cem_alpha) * actions_mean
+                actions_mean = self.cem_alpha * elites_mean + (1 - self.cem_alpha) * actions_mean
+                actions_std = self.cem_alpha * np.std(elites, axis=0) + (1 - self.cem_alpha) * actions_std
 
             # TODO(Q5): Set `cem_action` to the appropriate action chosen by CEM
-            cem_action = None
+            cem_action = self.low + (self.high - self.low) * elites_mean
 
             return cem_action[None]
         else:
